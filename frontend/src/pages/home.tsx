@@ -12,11 +12,7 @@ export default function Home() {
             MASTER
           </h1>
           <p className="text-xl md:text-2xl font-bold text-black mb-8 border-l-8 border-black pl-4">
-            The most BRUTAL task manager ever created! 💪
-          </p>
-          <p className="text-lg font-bold text-gray-700 mb-8">
-            Stop procrastinating! Get stuff DONE with style. Track your tasks,
-            crush your goals, and level up your productivity game! 🚀
+            A task manager
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4">
@@ -41,7 +37,7 @@ export default function Home() {
             <div className="text-4xl mb-4">✅</div>
             <h3 className="text-2xl font-black mb-2 text-black">TRACK TASKS</h3>
             <p className="font-bold text-black">
-              Create, organize, and complete tasks like a boss!
+              Create, organize, and complete tasks on Time!
             </p>
           </div>
 
@@ -49,7 +45,7 @@ export default function Home() {
             <div className="text-4xl mb-4">⭐</div>
             <h3 className="text-2xl font-black mb-2 text-black">PRIORITY</h3>
             <p className="font-bold text-black">
-              Mark important tasks and crush them first!
+              Mark important tasks and get them done first!
             </p>
           </div>
 
@@ -59,7 +55,7 @@ export default function Home() {
               ADMIN POWERS
             </h3>
             <p className="font-bold text-black">
-              Manage teams with admin superpowers!
+              Manage teams with admin previlages!
             </p>
           </div>
         </div>
@@ -67,7 +63,7 @@ export default function Home() {
         {/* Footer */}
         <div className="mt-8 text-center">
           <p className="text-xl font-black text-black bg-white border-4 border-black p-4 inline-block shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]">
-            MADE WITH 💛 & CAFFEINE
+            <a href="https://github.com/Ujjwal-Gowda">VISIT ME</a>
           </p>
         </div>
       </div>

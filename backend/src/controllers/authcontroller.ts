@@ -2,7 +2,8 @@ import { Request, Response } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { User } from "../models/user";
-
+import dotenv from "dotenv";
+dotenv.config();
 export const registerUser = async (req: Request, res: Response) => {
   try {
     const { name, email, password, isAdmin } = req.body;
@@ -42,7 +43,7 @@ export const registerUser = async (req: Request, res: Response) => {
 export const loginUser = async (req: Request, res: Response) => {
   try {
     const { email, password } = req.body;
-
+    console.log("jwtsec", process.env.JWT_SECRET);
     if (!email || !password) {
       return res.status(400).json({ message: "All fields are required" });
     }
@@ -74,6 +75,9 @@ export const loginUser = async (req: Request, res: Response) => {
       },
     });
   } catch (error) {
-    res.status(500).json({ message: "Login failed", error });
+    console.error("Login error:", error);
+    res
+      .status(500)
+      .json({ message: "Login failed", error: (error as Error).message });
   }
 };

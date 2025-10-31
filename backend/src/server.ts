@@ -8,6 +8,7 @@ const app = express();
 dotenv.config();
 app.use(cors());
 app.use(express.json());
+
 app.use("/api/auth", authRoutes);
 app.use("/api/tasks", taskRoutes);
 const startServer = async () => {

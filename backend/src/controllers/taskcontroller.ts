@@ -2,10 +2,9 @@ import { Request, Response } from "express";
 import { Task } from "../models/task";
 
 interface AuthRequest extends Request {
-  user?: any; // populated by auth middleware
+  user?: any;
 }
 
-// ✅ CREATE a new task
 export const createTask = async (req: AuthRequest, res: Response) => {
   try {
     const { title, description, dueDate, priority } = req.body;
@@ -28,19 +27,16 @@ export const createTask = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ✅ GET all tasks (admin sees all, user sees only theirs) with filtering & sorting
 export const getTasks = async (req: AuthRequest, res: Response) => {
   try {
-    const filter: any = req.user.isAdmin ? {} : { user: req.user.id };
-
-    // Optional filters
+    const filter: any = {};
+    console.log(filter);
     const { priority, isCompleted, isImportant, sortBy } = req.query;
 
     if (priority) filter.priority = priority;
     if (isCompleted !== undefined) filter.isCompleted = isCompleted === "true";
     if (isImportant !== undefined) filter.isImportant = isImportant === "true";
 
-    // Sorting logic
     let sortOption: any = {};
     switch (sortBy) {
       case "dueDate":
@@ -67,7 +63,6 @@ export const getTasks = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ✅ UPDATE task (only owner or admin)
 export const updateTask = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
@@ -91,7 +86,6 @@ export const updateTask = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ✅ DELETE task (admin or owner)
 export const deleteTask = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
@@ -110,7 +104,6 @@ export const deleteTask = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ✅ MARK AS IMPORTANT (admin only)
 export const markImportant = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
@@ -130,7 +123,6 @@ export const markImportant = async (req: AuthRequest, res: Response) => {
   }
 };
 
-// ✅ MARK AS COMPLETED (owner or admin)
 export const markCompleted = async (req: AuthRequest, res: Response) => {
   try {
     const { id } = req.params;
