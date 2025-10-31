@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-const API_URL = "http://localhost:5000/api";
-
+const deployed = "https://task-management-5eed.onrender.com/api";
+const API_URL = deployed || "http://localhost:5000/api";
 interface Task {
   _id: string;
   title: string;
