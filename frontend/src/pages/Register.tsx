@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-
-const API_URL = "http://localhost:5000/api";
+const deployed = "https://task-management-5eed.onrender.com/api";
+const API_URL = deployed || "http://localhost:5000/api";
 
 interface RegisterProps {
   onRegister: (user: any, token: string) => void;
