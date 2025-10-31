@@ -6,6 +6,12 @@ import taskRoutes from "./routes/taskroutes";
 import authRoutes from "./routes/authroutes";
 const app = express();
 dotenv.config();
+
+const allowedOrigins = [
+  "http://localhost:5173",
+  "http://localhost:3000",
+  "http://task-management-beige-chi.vercel.app",
+];
 app.use(cors());
 app.use(express.json());
 
