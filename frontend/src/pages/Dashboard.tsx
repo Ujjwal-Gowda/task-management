@@ -29,10 +29,12 @@ interface DashboardProps {
 export default function Dashboard({ user, onLogout }: DashboardProps) {
   const navigate = useNavigate();
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [taskId, setTaskId] = useState("");
   const [filter, setFilter] = useState<"all" | "completed" | "important">(
     "all",
   );
   const [showAddTask, setShowAddTask] = useState(false);
+  const [showUpdTask, setShowUpdTask] = useState(false);
   const [taskForm, setTaskForm] = useState({
     title: "",
     description: "",
@@ -57,7 +59,37 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
       console.error("Failed to fetch tasks", err);
     }
   };
+  const handleUpdateTask = async () => {
+    try {
+      const token = localStorage.getItem("token");
+      const response = await fetch(`${API_URL}/tasks`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(taskForm),
+      });
 
+      if (!response.ok) throw new Error("Failed to create task");
+
+      deleteTask(taskId);
+      setTaskForm({
+        title: "",
+        description: "",
+        dueDate: "",
+        priority: "medium",
+      });
+      setTaskId("");
+      setShowAddTask(false);
+      fetchTasks();
+      setShowUpdTask(false);
+      setSuccess("Task created successfully! 🎉");
+      setTimeout(() => setSuccess(""), 3000);
+    } catch (err: any) {
+      console.error(err.message);
+    }
+  };
   const handleCreateTask = async () => {
     try {
       const token = localStorage.getItem("token");
@@ -201,7 +233,92 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
             </button>
           </div>
         </div>
+        {showUpdTask && (
+          <div className="bg-orange-300 border-4 border-black p-6 mb-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
+            <h3 className="text-2xl font-black mb-4 text-black">UPDATE TASK</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block font-bold mb-2 text-black">
+                  TITLE *
+                </label>
+                <input
+                  type="text"
+                  value={taskForm.title}
+                  onChange={(e) =>
+                    setTaskForm({ ...taskForm, title: e.target.value })
+                  }
+                  className="w-full p-3 border-4 border-black font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                  placeholder="What needs to be done?"
+                />
+              </div>
 
+              <div>
+                <label className="block font-bold mb-2 text-black">
+                  DESCRIPTION
+                </label>
+                <textarea
+                  value={taskForm.description}
+                  onChange={(e) =>
+                    setTaskForm({ ...taskForm, description: e.target.value })
+                  }
+                  className="w-full p-3 border-4 border-black font-bold h-24 focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                  placeholder="Add some details..."
+                />
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block font-bold mb-2 text-black">
+                    DUE DATE
+                  </label>
+                  <input
+                    type="date"
+                    value={taskForm.dueDate}
+                    onChange={(e) =>
+                      setTaskForm({ ...taskForm, dueDate: e.target.value })
+                    }
+                    className="w-full p-3 border-4 border-black font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                  />
+                </div>
+
+                <div>
+                  <label className="block font-bold mb-2 text-black">
+                    PRIORITY
+                  </label>
+                  <select
+                    value={taskForm.priority}
+                    onChange={(e) =>
+                      setTaskForm({
+                        ...taskForm,
+                        priority: e.target.value as any,
+                      })
+                    }
+                    className="w-full p-3 border-4 border-black font-bold focus:outline-none focus:shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                  >
+                    <option value="low">LOW</option>
+                    <option value="medium">MEDIUM</option>
+                    <option value="high">HIGH</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="flex gap-3">
+                <button
+                  onClick={handleUpdateTask}
+                  className="flex-1 bg-green-400 border-4 border-black p-4 font-black text-black hover:bg-green-300 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                >
+                  UPDATE TASK
+                </button>
+                <button
+                  onClick={() => setShowUpdTask(false)}
+                  className="px-6 bg-white border-4 border-black font-black text-black hover:bg-gray-100 shadow-[4px_4px_0px_0px_rgba(0,0,0,1)]"
+                >
+                  CANCEL
+                </button>
+              </div>
+            </div>
+          </div>
+        )}
         {/* Add Task Form */}
         {showAddTask && (
           <div className="bg-orange-300 border-4 border-black p-6 mb-6 shadow-[8px_8px_0px_0px_rgba(0,0,0,1)]">
@@ -333,6 +450,15 @@ export default function Dashboard({ user, onLogout }: DashboardProps) {
                               className={`px-4 py-2 border-4 border-black font-black ${task.isImportant ? "bg-yellow-400" : "bg-white"} hover:bg-yellow-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`}
                             >
                               ⭐
+                            </button>
+                            <button
+                              onClick={() => {
+                                setShowUpdTask(!showUpdTask);
+                                setTaskId(task._id);
+                              }}
+                              className={`px-4 py-2 border-4 border-black font-black ${task.isImportant ? "bg-yellow-400" : "bg-white"} hover:bg-yellow-300 shadow-[2px_2px_0px_0px_rgba(0,0,0,1)]`}
+                            >
+                              U
                             </button>
                             <button
                               onClick={() => deleteTask(task._id)}

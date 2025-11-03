@@ -26,7 +26,6 @@ export const createTask = async (req: AuthRequest, res: Response) => {
     res.status(500).json({ message: "Failed to create task", error });
   }
 };
-
 export const getTasks = async (req: AuthRequest, res: Response) => {
   try {
     const filter: any = {};
